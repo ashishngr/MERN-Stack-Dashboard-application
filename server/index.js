@@ -7,14 +7,21 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import clientRoutes from "./routes/client.js";
 import generalRoutes from "./routes/general.js";
-// import managementRoutes from "./routes/management.js";
-// import salesRoutes from "./routes/sales.js";
+import managementRoutes from "./routes/management.js";
+import salesRoutes from "./routes/sales.js";
 
 // Data import 
 import User from './models/User.js';
 import Product from './models/Product.js';
 import ProductStat from './models/ProductStat.js';
-import {dataUser, dataProduct, dataProductStat } from './data/index.js'
+import {
+    dataUser,
+    dataProduct,
+    dataProductStat,
+    dataTransaction,
+    dataOverallStat,
+    dataAffiliateStat
+} from './data/index.js'
 
 
 /* Configuration */
@@ -30,9 +37,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 
 /*ROUTES */
-app.use("/client", clientRoutes);
-// app.use("/management", managementRoutes);
-// app.use("sales", salesRoutes);
+app.use("/client/", clientRoutes);
+app.use("/management", managementRoutes);
+app.use("sales", salesRoutes);
 app.use("/general", generalRoutes);
 
 /*MONGOOSE SETUP */
@@ -43,8 +50,11 @@ mongoose.connect(process.env.MONGO_URL, {
     useUnifiedTopology: true
 }).then(()=>{
     app.listen(PORT, ()=> console.log(`Server Port: ${PORT}`))
-    // Only add data one time
-    // User.insertMany(dataUser);
+    // AffiliateStat.insertMany(dataAffiliateStat);
+    // OverallStat.insertMany(dataOverallStat);
     // Product.insertMany(dataProduct);
     // ProductStat.insertMany(dataProductStat);
+    // Transaction.insertMany(dataTransaction);
+    // User.insertMany(dataUser);
+
 }).catch((error)=> console.log(`${error}: did not connect`))
